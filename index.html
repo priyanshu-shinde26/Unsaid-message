@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Respectful Message</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-off-white: #f8f5f2;
+            --color-blush: #fdecef;
+            --color-rose: #e8a2b8;
+            --color-text-dark: #333333;
+            --color-text-light: #555555;
+            --color-border-pink: #e8a2b8;
+            --color-btn-hover: #d48fa5;
+            --color-gray-border: #cccccc;
+            --color-bg-light: #fafafa;
+        }
+
+        body {
+            font-family: 'Inter', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, var(--color-off-white) 0%, var(--color-blush) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-dark);
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle decorative elements */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(232, 162, 184, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -80px;
+            left: -80px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(253, 236, 239, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 750px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .message-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.6s ease-out;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-heading {
+            font-family: 'Playfair Display', 'Merriweather', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--color-text-dark);
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .message-text {
+            font-size: 17px;
+            line-height: 1.75;
+            color: var(--color-text-dark);
+            letter-spacing: 0.2px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Inter', 'Lato', sans-serif;
+            max-height: 65vh;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .message-text p {
+            margin-bottom: 18px;
+        }
+
+        .emotional-highlight {
+            font-style: italic;
+            color: var(--color-text-dark);
+            border-left: 3px solid var(--color-border-pink);
+            padding-left: 16px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        button {
+            padding: 14px 32px;
+            font-size: 15px;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            min-width: 160px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            flex-shrink: 0;
+        }
+
+        .btn-yes {
+            background: var(--color-rose);
+            color: white;
+            box-shadow: 0 4px 15px rgba(232, 162, 184, 0.25);
+            border: none;
+        }
+
+        .btn-yes:hover {
+            background: var(--color-btn-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232, 162, 184, 0.35);
+        }
+
+        .btn-no {
+            background: transparent;
+            color: var(--color-text-light);
+            border: 2px solid var(--color-gray-border);
+            box-shadow: none;
+        }
+
+        .btn-no:hover {
+            background: #f5f5f5;
+            border-color: #bbbbbb;
+        }
+
+        .response-card {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            padding: 50px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            animation: slideIn 0.6s ease-out;
+            min-height: 350px;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .response-card.show {
+            display: flex;
+        }
+
+        .response-card h2 {
+            font-family: 'Playfair Display', 'Merriweather', serif;
+            font-size: 26px;
+            margin-bottom: 24px;
+            color: var(--color-text-dark);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .response-card p {
+            font-size: 16px;
+            line-height: 1.75;
+            color: var(--color-text-light);
+            margin-bottom: 18px;
+            font-family: 'Inter', 'Lato', sans-serif;
+        }
+
+        .contact-info {
+            background: rgba(232, 162, 184, 0.08);
+            border-radius: 12px;
+            padding: 28px;
+            margin: 28px 0;
+            display: none;
+            border: 1px solid rgba(232, 162, 184, 0.15);
+        }
+
+        .contact-info.show {
+            display: block;
+        }
+
+        .contact-link {
+            display: block;
+            margin: 16px 0;
+            font-size: 16px;
+            font-family: 'Inter', 'Lato', sans-serif;
+        }
+
+        .contact-link a {
+            color: var(--color-rose);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid transparent;
+        }
+
+        .contact-link a:hover {
+            color: var(--color-btn-hover);
+            border-bottom: 1px solid var(--color-rose);
+        }
+
+        .response-no {
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        .response-no h2 {
+            color: var(--color-text-dark);
+        }
+
+        .response-no p {
+            color: var(--color-text-light);
+        }
+
+        .response-no-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(232, 162, 184, 0.2);
+            display: none;
+        }
+
+        .qr-section.show {
+            display: block;
+        }
+
+        .qr-section p {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-bottom: 15px;
+        }
+
+        .qr-code-image {
+            display: inline-block;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .qr-code-image img {
+            display: block;
+            width: 120px;
+            height: 120px;
+        }
+
+        @media (max-width: 600px) {
+            .message-card,
+            .response-card {
+                padding: 35px 24px;
+                margin: 0;
+                border-radius: 12px;
+            }
+
+            .message-heading {
+                font-size: 22px;
+                margin-bottom: 24px;
+            }
+
+            .message-text {
+                font-size: 16px;
+                line-height: 1.7;
+                max-height: 55vh;
+            }
+
+            .response-card h2 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            .response-card p {
+                font-size: 15px;
+            }
+
+            button {
+                padding: 12px 28px;
+                font-size: 15px;
+                min-width: 140px;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                gap: 12px;
+                margin-top: 30px;
+            }
+
+            .contact-link {
+                font-size: 15px;
+            }
+
+            .qr-code-image img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message-card" id="mainMessage">
+            <div class="message-heading">A Message I Didn't Want to Leave Unsaid</div>
+            <div class="message-text">
+Hi 🌸......
+
+I don't know your name..... your department..... or anything personal about you ..... and I want to keep it that way unless you choose otherwise 🤍....
+
+I'm writing this because my college journey is coming to an end 🎓.... and before I leave for my internship..... I didn't want to leave with an unspoken feeling or regret....
+
+I first noticed you during my 5th semester at the campus bus stop 🚌.... Since then... seeing you around campus often brought a calm and positive feeling to my day ☁️... Nothing dramatic.... nothing unrealistic ....just a simple.... genuine admiration that grew over time....
+
+Over time.... that admiration became something deeper for me....
+
+<span class="emotional-highlight">My heartbeat would suddenly rise when I saw you 💓......</span>
+
+Even without a single conversation.... your presence stayed in my thoughts longer than I expected 💭....
+
+You became someone I quietly looked forward to seeing, someone who made ordinary college days feel a little lighter and more meaningful ✨.....
+
+I want to be very clear about something important:
+
+This message comes from respect, not expectation 🤝.......
+
+You don't owe me anything ... not a reply, not an explanation 🤍.....
+
+I gathered the courage to share this because honesty matters to me..... and I believe expressing feelings respectfully is better than carrying them silently 🌱....
+
+If you feel even a little comfortable or curious to talk someday... you can choose Yes 😊.....
+
+If not, you can choose No.... and I will fully respect that decision without any follow-up 🌼....
+
+No matter your choice.... thank you for reading this and for unknowingly being a good part of my college memories 🌷....
+
+I wish you happiness and success ahead 🍀.....
+
+.....From someone who wanted to be honest once....respectfully 🤍....
+</div>
+
+
+            <div class="buttons-container">
+                <button class="btn-yes" onclick="handleYes()">✅ Yes, I'm open to talking</button>
+                <button class="btn-no" onclick="handleNo()">❌ No, I'm not comfortable</button>
+            </div>
+        </div>
+
+        <div class="response-card" id="responseYes">
+            <h2>Thank you for being open to this</h2>
+            <p>You can reach me here, only if and when you're comfortable:</p>
+            <div class="contact-info show">
+                <div class="contact-link">
+                    📞 Phone: <a href="tel:+919623484925">+91 9623484925</a>
+                </div>
+                <div class="contact-link">
+                    📸 Instagram: <a href="https://instagram.com/priyanshu_shinde26" target="_blank" rel="noopener noreferrer">@priyanshu_shinde26</a>
+                </div>
+            </div>
+            <p style="margin-top: 20px; font-style: italic; color: var(--color-text-light);">No pressure at all — take your time.</p>
+        
+        </div>
+
+        <div class="response-card response-no" id="responseNo">
+            <div class="response-no-icon">🌸</div>
+            <h2>Thank you for your honesty</h2>
+            <p>I completely respect your decision.</p>
+            <p>I wish you happiness, peace, and success in everything ahead.</p>
+        </div>
+    </div>
+
+    <script>
+        function handleYes() {
+            document.getElementById('mainMessage').classList.add('hidden');
+            document.getElementById('responseYes').classList.add('show');
+        }
+
+        function handleNo() {
+            document.getElementById('mainMessage').classList.add('hidden');
+            document.getElementById('responseNo').classList.add('show');
+        }
+    </script>
+</body>
+</html>
